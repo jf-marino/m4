@@ -16,13 +16,13 @@ RtAllocator::~RtAllocator() {
         clear_cell(*it);
     }
 
-    for (auto it = this->block.begin(); it != this->blocks.end(); ++it) {
-        (*it)->~RtBlock(this->inner);
+    for (auto it = this->blocks.begin(); it != this->blocks.end(); ++it) {
+        (*it).~RtBlock();
     }
 }
 
 void RtAllocator::add_block() {
-    auto new_block = RtBlock(this->inner);
+    auto new_block = RtBlock(&this->inner);
     auto begin = new_block.blob;
     for (int i = 0; i < CELL_COUNT; i++) {
         auto current = begin + (i * CELL_SIZE);
