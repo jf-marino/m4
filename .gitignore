@@ -4,6 +4,9 @@
 # Bazel files
 bazel-*
 
+# Local dev files
+travis.local.sh
+
 # Prerequisites
 *.d
 

@@ -11,4 +11,4 @@ before_install:
   - sudo dpkg -i bazel_0.24.1-linux-x86_64.deb
 
 script:
-  - bazel test //src/test:m4-test
+  - bazel test //src/test:m4-test --test_output=all
