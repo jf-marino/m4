@@ -1,5 +1,6 @@
 // Created by Juan Francisco Marino on 2019-04-17.
 
+#include <cstring>
 #include "RtCell.h"
 #include "RtBlock.h"
 #include "RtAllocator.h"
@@ -24,7 +25,7 @@ RtAllocator::~RtAllocator() {
 void RtAllocator::add_block() {
     auto new_block = RtBlock(&this->inner);
     auto begin = new_block.blob;
-    for (int i = 0; i < CELL_COUNT; i++) {
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
         auto current = begin + (i * CELL_SIZE);
         this->free_cells.push_back(reinterpret_cast<RtCell*>(current));
     }
