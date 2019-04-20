@@ -3,7 +3,7 @@ dist: trusty
 language: generic
 
 jdk: openjdk8
-compiler: clang
+compiler: gcc
 
 before_install:
   - sudo apt-get install wget pkg-config g++ zlib1g-dev
