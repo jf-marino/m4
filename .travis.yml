@@ -2,16 +2,8 @@ dist: trusty
 
 language: cpp
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - wget
-      - pkg-config
-
 before_install:
-  - sudo apt-get install pkg-config zip g++ zlib1g-dev unzip python openjdk-8-jdk
+  - sudo apt-get install wget pkg-config g++ zlib1g-dev openjdk-8-jdk
   - wget https://github.com/bazelbuild/bazel/releases/download/0.3.1/bazel_0.3.1-linux-x86_64.deb
   - sudo dpkg -i bazel_0.3.1-linux-x86_64.deb
 
