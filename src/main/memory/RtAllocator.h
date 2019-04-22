@@ -10,12 +10,12 @@
 
 class RtAllocator {
 protected:
-    std::list<RtBlock> blocks;
+    std::list<RtBlock*> blocks;
     std::list<RtCell*> free_cells;
     std::list<RtCell*> used_cells;
 public:
     RtAllocator() = default;
-    ~RtAllocator();
+    ~RtAllocator() = default;
 
 protected:
     void add_block();

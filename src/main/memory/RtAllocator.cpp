@@ -11,20 +11,9 @@ void clear_cell(RtCell* cell) {
     memset((void*)cell, 0, CELL_SIZE); // Zero out the contents of the cell
 }
 
-
-RtAllocator::~RtAllocator() {
-    for (auto it = this->used_cells.begin(); it != this->used_cells.end(); ++it) {
-        clear_cell(*it);
-    }
-
-    for (auto it = this->blocks.begin(); it != this->blocks.end(); ++it) {
-        (*it).~RtBlock();
-    }
-}
-
 void RtAllocator::add_block() {
-    auto new_block = RtBlock();
-    auto begin = new_block.blob;
+    auto new_block = new RtBlock();
+    auto begin = new_block->blob;
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         auto current = begin + (i * CELL_SIZE);
         this->free_cells.push_back(reinterpret_cast<RtCell*>(current));
