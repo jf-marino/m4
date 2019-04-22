@@ -15,7 +15,7 @@ protected:
     std::list<RtCell*> used_cells;
 public:
     RtAllocator() = default;
-    ~RtAllocator() = default;
+    ~RtAllocator();
 
 protected:
     void add_block();

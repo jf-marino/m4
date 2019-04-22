@@ -21,6 +21,12 @@ void RtAllocator::add_block() {
     this->blocks.push_back(new_block);
 }
 
+RtAllocator::~RtAllocator() {
+    for (auto it = this->blocks.begin() ; it != this->blocks.end() ; ++it) {
+        (*it)->~RtBlock();
+    }
+}
+
 std::list<RtCell *> RtAllocator::pinned() {
     std::list<RtCell*> pinned = {};
     for (auto it = this->used_cells.begin(); it != this->used_cells.end(); ++it) {
