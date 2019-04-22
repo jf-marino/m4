@@ -3,6 +3,7 @@
 #ifndef M4_RTTHREAD_H
 #define M4_RTTHREAD_H
 
+#include <thread>
 #include "../memory/RtAllocator.h"
 #include "../memory/RtCell.h"
 

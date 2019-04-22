@@ -9,8 +9,8 @@ const unsigned int CELL_SIZE = 64;
 
 class RtCell {
 public:
-    bool pinned : 1 = false;
-    bool marked : 1 = false;
+    bool pinned : 1;
+    bool marked : 1;
 public:
     virtual ~RtCell() = default;
 public:

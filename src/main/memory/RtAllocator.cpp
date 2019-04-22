@@ -1,5 +1,6 @@
 // Created by Juan Francisco Marino on 2019-04-17.
 
+#include <cstring>
 #include "RtCell.h"
 #include "RtBlock.h"
 #include "RtAllocator.h"
@@ -10,21 +11,10 @@ void clear_cell(RtCell* cell) {
     memset((void*)cell, 0, CELL_SIZE); // Zero out the contents of the cell
 }
 
-
-RtAllocator::~RtAllocator() {
-    for (auto it = this->used_cells.begin(); it != this->used_cells.end(); ++it) {
-        clear_cell(*it);
-    }
-
-    for (auto it = this->block.begin(); it != this->blocks.end(); ++it) {
-        (*it)->~RtBlock(this->inner);
-    }
-}
-
 void RtAllocator::add_block() {
-    auto new_block = RtBlock(this->inner);
-    auto begin = new_block.blob;
-    for (int i = 0; i < CELL_COUNT; i++) {
+    auto new_block = new RtBlock();
+    auto begin = new_block->blob;
+    for (unsigned int i = 0; i < CELL_COUNT; i++) {
         auto current = begin + (i * CELL_SIZE);
         this->free_cells.push_back(reinterpret_cast<RtCell*>(current));
     }
