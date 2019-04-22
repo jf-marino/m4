@@ -23,7 +23,7 @@ RtAllocator::~RtAllocator() {
 }
 
 void RtAllocator::add_block() {
-    auto new_block = RtBlock(&this->inner);
+    auto new_block = RtBlock();
     auto begin = new_block.blob;
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         auto current = begin + (i * CELL_SIZE);

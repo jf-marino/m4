@@ -7,10 +7,10 @@ const unsigned int CELL_COUNT = 1024;
 
 class RtBlock {
 public:
-    std::allocator<char>* alloc;
+    std::allocator<char> block_allocator;
     char* blob = nullptr;
 public:
-    RtBlock(std::allocator<char>* alloc);
+    RtBlock();
     ~RtBlock();
 };
 

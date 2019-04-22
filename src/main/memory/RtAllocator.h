@@ -10,7 +10,6 @@
 
 class RtAllocator {
 protected:
-    std::allocator<char> inner;
     std::list<RtBlock> blocks;
     std::list<RtCell*> free_cells;
     std::list<RtCell*> used_cells;

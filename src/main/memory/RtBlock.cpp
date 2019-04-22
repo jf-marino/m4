@@ -3,11 +3,10 @@
 #include "RtCell.h"
 #include "RtBlock.h"
 
-RtBlock::RtBlock(std::allocator<char>* alloc) {
-    this->alloc = alloc;
-    this->blob = this->alloc->allocate(CELL_SIZE * CELL_COUNT);
+RtBlock::RtBlock() {
+    this->blob = this->block_allocator.allocate(CELL_SIZE * CELL_COUNT);
 }
 
 RtBlock::~RtBlock() {
-    this->alloc->deallocate(this->blob, CELL_SIZE * CELL_COUNT);
+    this->block_allocator.deallocate(this->blob, CELL_SIZE * CELL_COUNT);
 }

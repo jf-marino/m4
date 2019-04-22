@@ -1,5 +1,6 @@
 // Created by Juan Francisco Marino on 2019-04-18.
 
+#include <iostream>
 #include "gtest/gtest.h"
 #include "src/main/memory/RtCell.h"
 #include "src/main/memory/RtAllocator.h"
@@ -27,9 +28,9 @@ public:
 
 
 
-
 TEST(AllocatorTest, AllocateAnObject) {
     auto alloc = new RtAllocator();
+
     auto john = alloc->allocate<User>();
     auto alice = alloc->allocate<User>();
 
@@ -59,6 +60,7 @@ TEST(AllocatorTest, CollectUnusedMemory) {
     john->parent = alice;
 
     alloc->collect(std::list<RtCell*> { john });
+
 
     EXPECT_EQ(john->name, "John Doe");
     EXPECT_EQ(alice->name, "Alice Foo");
