@@ -3,10 +3,18 @@
 #ifndef M4_FUNCTION_H
 #define M4_FUNCTION_H
 
+#include "Avl.h"
+
+using runtime::core::memory::Cell;
+using runtime::core::memory::Allocator;
 
 namespace runtime {
     namespace core {
         namespace objects {
+            class Execution {
+
+            };
+
             class Function {
 
             };
