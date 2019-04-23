@@ -39,7 +39,7 @@ Placeholder* h(Allocator* alloc, std::string one, std::string two) {
 }
 
 
-TEST(AvlTest, ShouldNotExceedSizeLimits) {
+TEST(AvlTest, MustNotExceedSizeLimits) {
     EXPECT_THAT(sizeof(Placeholder), Le(CELL_SIZE));
     EXPECT_THAT(sizeof(Avl<int, Placeholder>), Le(CELL_SIZE));
 }

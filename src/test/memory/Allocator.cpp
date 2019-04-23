@@ -31,7 +31,7 @@ public:
 
 
 
-TEST(AllocatorTest, AllocateAnObject) {
+TEST(AllocatorTest, AllocatesAnObject) {
     auto alloc = new Allocator();
 
     auto john = alloc->allocate<User>();
@@ -46,7 +46,7 @@ TEST(AllocatorTest, AllocateAnObject) {
     EXPECT_EQ(alice->name, "Alice Foo");
 }
 
-TEST(AllocatorTest, CollectUnusedMemory) {
+TEST(AllocatorTest, CollectsUnusedMemory) {
     auto alloc = new Allocator();
     auto john = alloc->allocate<User>();
     auto alice = alloc->allocate<User>();

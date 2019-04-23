@@ -8,6 +8,6 @@ using testing::Le;
 using runtime::core::memory::CELL_SIZE;
 using runtime::core::memory::Cell;
 
-TEST(CellTest, ShouldNotExceedSizeLimits) {
+TEST(CellTest, MustNotExceedSizeLimits) {
     EXPECT_THAT(sizeof(Cell), Le(CELL_SIZE));
 }

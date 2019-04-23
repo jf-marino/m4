@@ -3,7 +3,6 @@
 #ifndef M4_AVL_H
 #define M4_AVL_H
 
-#include <iostream>
 #include "../memory/Allocator.h"
 
 using runtime::core::memory::Cell;
@@ -14,6 +13,10 @@ namespace runtime {
     namespace core {
         namespace objects {
 
+            // Forward declaration of Iterator so we can use it as a friend
+            template <typename K, class V>
+            class Iterator;
+
             template <typename K, class V>
             class Avl : public Cell {
             private:
@@ -23,6 +26,8 @@ namespace runtime {
                 Avl<K, V>* left_node;
                 unsigned int rh;
                 Avl<K, V>* right_node;
+
+                friend class Iterator<K, V>;
 
             private:
                 Avl<K, V>* clone(Allocator* allocator) {
@@ -172,6 +177,8 @@ namespace runtime {
                 };
 
             public:
+                K get_key() { return this->key; }
+                V* get_value() { return this->value; }
                 unsigned int height() { return this->rh > this->lh ? this->rh : this->lh; }
                 unsigned int weight() { return this->rh - this->lh; }
 
