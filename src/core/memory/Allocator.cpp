@@ -1,38 +1,38 @@
 // Created by Juan Francisco Marino on 2019-04-17.
 
 #include <cstring>
-#include "RtCell.h"
-#include "RtBlock.h"
-#include "RtAllocator.h"
+#include "Cell.h"
+#include "Block.h"
+#include "Allocator.h"
 
 using runtime::core::memory::CELL_SIZE;
-using runtime::core::memory::RtCell;
-using runtime::core::memory::RtAllocator;
+using runtime::core::memory::Cell;
+using runtime::core::memory::Allocator;
 
-void clear_cell(RtCell* cell) {
+void clear_cell(Cell* cell) {
     if (cell == nullptr) return;
-    cell->~RtCell(); // Call destructor
+    cell->~Cell(); // Call destructor
     memset((void*)cell, 0, CELL_SIZE); // Zero out the contents of the cell
 }
 
-void RtAllocator::add_block() {
-    auto new_block = new RtBlock();
+void Allocator::add_block() {
+    auto new_block = new Block();
     auto begin = new_block->blob;
     for (unsigned int i = 0; i < CELL_COUNT; i++) {
         auto current = begin + (i * CELL_SIZE);
-        this->free_cells.push_back(reinterpret_cast<RtCell*>(current));
+        this->free_cells.push_back(reinterpret_cast<Cell*>(current));
     }
     this->blocks.push_back(new_block);
 }
 
-RtAllocator::~RtAllocator() {
+Allocator::~Allocator() {
     for (auto it = this->blocks.begin() ; it != this->blocks.end() ; ++it) {
-        (*it)->~RtBlock();
+        (*it)->~Block();
     }
 }
 
-std::list<RtCell *> RtAllocator::pinned() {
-    std::list<RtCell*> pinned = {};
+std::list<Cell *> Allocator::pinned() {
+    std::list<Cell*> pinned = {};
     for (auto it = this->used_cells.begin(); it != this->used_cells.end(); ++it) {
         if ((*it)->pinned) {
             pinned.push_back(*it);
@@ -41,7 +41,7 @@ std::list<RtCell *> RtAllocator::pinned() {
     return pinned;
 }
 
-void RtAllocator::mark(std::list<RtCell*> roots) {
+void Allocator::mark(std::list<Cell*> roots) {
     auto pinned = this->pinned();
 
     roots.splice(roots.end(), pinned);
@@ -54,9 +54,9 @@ void RtAllocator::mark(std::list<RtCell*> roots) {
     }
 }
 
-void RtAllocator::sweep() {
-    std::list<RtCell*> remove = {};
-    std::list<RtCell*> keep;
+void Allocator::sweep() {
+    std::list<Cell*> remove = {};
+    std::list<Cell*> keep;
     for (auto it = this->used_cells.begin(); it != this->used_cells.end(); ++it) {
         if (!(*it)->marked) {
             clear_cell(*it);
@@ -71,11 +71,11 @@ void RtAllocator::sweep() {
     this->free_cells.splice(this->free_cells.end(), remove);
 }
 
-void RtAllocator::collect(std::list<RtCell*> roots) {
+void Allocator::collect(std::list<Cell*> roots) {
     this->mark(roots);
     this->sweep();
 }
 
-bool RtAllocator::can_remove() {
+bool Allocator::can_remove() {
     return this->pinned().empty();
 }

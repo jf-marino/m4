@@ -3,35 +3,35 @@
 #include <string>
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "src/core/memory/RtCell.h"
-#include "src/core/memory/RtAllocator.h"
-#include "src/core/objects/RtAvl.h"
+#include "src/core/memory/Cell.h"
+#include "src/core/memory/Allocator.h"
+#include "src/core/objects/Avl.h"
 
 using testing::Le;
 using testing::Ne;
 using runtime::core::memory::CELL_SIZE;
-using runtime::core::memory::RtCell;
-using runtime::core::memory::RtAllocator;
-using runtime::core::objects::RtAvl;
+using runtime::core::memory::Cell;
+using runtime::core::memory::Allocator;
+using runtime::core::objects::Avl;
 
 /*
  * Example class used as a placeholder inside AVL node tests. This class should try to be close
- * to the size limit of CELL_SIZE (defined in RtCell.h) so as to mimic normal runtime conditions
+ * to the size limit of CELL_SIZE (defined in Cell.h) so as to mimic normal runtime conditions
  * as close as possible.
  */
-class Placeholder : public RtCell {
+class Placeholder : public Cell {
 public:
     std::string field_one;
     std::string field_two;
 public:
     Placeholder() = default;
-    std::list<RtCell*> references() override {
-        return std::list<RtCell*> {};
+    std::list<Cell*> references() override {
+        return std::list<Cell*> {};
     }
 };
 
 
-Placeholder* h(RtAllocator* alloc, std::string one, std::string two) {
+Placeholder* h(Allocator* alloc, std::string one, std::string two) {
     auto ph = alloc->allocate<Placeholder>();
     ph->field_one = one;
     ph->field_two = two;
@@ -41,18 +41,18 @@ Placeholder* h(RtAllocator* alloc, std::string one, std::string two) {
 
 TEST(AvlTest, ShouldNotExceedSizeLimits) {
     EXPECT_THAT(sizeof(Placeholder), Le(CELL_SIZE));
-    EXPECT_THAT(sizeof(RtAvl<int, Placeholder>), Le(CELL_SIZE));
+    EXPECT_THAT(sizeof(Avl<int, Placeholder>), Le(CELL_SIZE));
 }
 
 TEST(AvlTest, ShouldCreate) {
-    auto allocator = new RtAllocator();
-    auto node = allocator->allocate<RtAvl<int, Placeholder>>();
+    auto allocator = new Allocator();
+    auto node = allocator->allocate<Avl<int, Placeholder>>();
     EXPECT_THAT(node, Ne(nullptr));
 }
 
 TEST(AvlTest, CanBalanceItself) {
-    auto allocator = new RtAllocator();
-    auto node = RtAvl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", "Snow"));
+    auto allocator = new Allocator();
+    auto node = Avl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", "Snow"));
 
     node = node->set(allocator, 2, h(allocator, "Danaerys", "Targaryen"));
     node = node->set(allocator, 3, h(allocator, "Arya", "Stark"));
@@ -69,8 +69,8 @@ TEST(AvlTest, CanBalanceItself) {
 }
 
 TEST(AvlTest, CanRemoveElements) {
-    auto allocator = new RtAllocator();
-    auto node = RtAvl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", "Snow"));
+    auto allocator = new Allocator();
+    auto node = Avl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", "Snow"));
     node = node->set(allocator, 2, h(allocator, "Danaerys", "Targaryen"));
     node = node->set(allocator, 3, h(allocator, "Arya", "Stark"));
 
@@ -86,15 +86,15 @@ TEST(AvlTest, CanRemoveElements) {
 }
 
 TEST(AvlTest, TestGarbageCollection) {
-    auto allocator = new RtAllocator();
-    auto node_one = RtAvl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", "Snow"));
+    auto allocator = new Allocator();
+    auto node_one = Avl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", "Snow"));
     auto node_two = node_one->set(allocator, 2, h(allocator, "Danaerys", "Targaryen"));
     auto node_three = node_two->set(allocator, 3, h(allocator, "Arya", "Stark"));
 
     EXPECT_THAT(node_two->get(1), Ne(nullptr));
     EXPECT_THAT(node_two->get(2), Ne(nullptr));
 
-    allocator->collect(std::list<RtCell*> { node_three });
+    allocator->collect(std::list<Cell*> { node_three });
 
     auto arya   = node_three->get(3);
     auto jon    = node_three->get(1);

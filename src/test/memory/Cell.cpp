@@ -2,12 +2,12 @@
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "src/core/memory/RtCell.h"
+#include "src/core/memory/Cell.h"
 
 using testing::Le;
 using runtime::core::memory::CELL_SIZE;
-using runtime::core::memory::RtCell;
+using runtime::core::memory::Cell;
 
 TEST(CellTest, ShouldNotExceedSizeLimits) {
-    EXPECT_THAT(sizeof(RtCell), Le(CELL_SIZE));
+    EXPECT_THAT(sizeof(Cell), Le(CELL_SIZE));
 }

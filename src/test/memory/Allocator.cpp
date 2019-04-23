@@ -2,16 +2,16 @@
 
 #include <iostream>
 #include "gtest/gtest.h"
-#include "src/core/memory/RtCell.h"
-#include "src/core/memory/RtAllocator.h"
+#include "src/core/memory/Cell.h"
+#include "src/core/memory/Allocator.h"
 
-using runtime::core::memory::RtCell;
-using runtime::core::memory::RtAllocator;
+using runtime::core::memory::Cell;
+using runtime::core::memory::Allocator;
 
 /**
  * Example class used to have something to allocate
  */
-class User : public RtCell {
+class User : public Cell {
 public:
     std::string name;
     unsigned int age;
@@ -20,8 +20,8 @@ public:
     User() = default;
     ~User() override = default;
 public:
-    std::list<RtCell*> references() override {
-        std::list<RtCell*> refs;
+    std::list<Cell*> references() override {
+        std::list<Cell*> refs;
         if (this->parent != nullptr) {
             refs.push_back(this->parent);
         }
@@ -32,7 +32,7 @@ public:
 
 
 TEST(AllocatorTest, AllocateAnObject) {
-    auto alloc = new RtAllocator();
+    auto alloc = new Allocator();
 
     auto john = alloc->allocate<User>();
     auto alice = alloc->allocate<User>();
@@ -47,7 +47,7 @@ TEST(AllocatorTest, AllocateAnObject) {
 }
 
 TEST(AllocatorTest, CollectUnusedMemory) {
-    auto alloc = new RtAllocator();
+    auto alloc = new Allocator();
     auto john = alloc->allocate<User>();
     auto alice = alloc->allocate<User>();
     auto helen = alloc->allocate<User>();
@@ -62,7 +62,7 @@ TEST(AllocatorTest, CollectUnusedMemory) {
 
     john->parent = alice;
 
-    alloc->collect(std::list<RtCell*> { john });
+    alloc->collect(std::list<Cell*> { john });
 
 
     EXPECT_EQ(john->name, "John Doe");

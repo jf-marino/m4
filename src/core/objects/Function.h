@@ -1,13 +1,13 @@
 // Created by Juan Francisco Marino on 2019-04-22.
 
-#ifndef M4_RTFUNCTION_H
-#define M4_RTFUNCTION_H
+#ifndef M4_FUNCTION_H
+#define M4_FUNCTION_H
 
 
 namespace runtime {
     namespace core {
         namespace objects {
-            class RtFunction {
+            class Function {
 
             };
         }
@@ -15,4 +15,4 @@ namespace runtime {
 }
 
 
-#endif //M4_RTFUNCTION_H
+#endif //M4_FUNCTION_H

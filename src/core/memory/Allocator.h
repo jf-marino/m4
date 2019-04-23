@@ -1,40 +1,40 @@
 // Created by Juan Francisco Marino on 2019-04-16.
 
-#ifndef M4_RTALLOCATOR_H
-#define M4_RTALLOCATOR_H
+#ifndef M4_ALLOCATOR_H
+#define M4_ALLOCATOR_H
 
 #include <memory>
 #include <list>
-#include "RtCell.h"
-#include "RtBlock.h"
+#include "Cell.h"
+#include "Block.h"
 
 namespace runtime {
     namespace core {
         namespace memory {
 
-            class RtAllocator {
+            class Allocator {
             protected:
-                std::list<RtBlock*> blocks;
-                std::list<RtCell*> free_cells;
-                std::list<RtCell*> used_cells;
+                std::list<Block*> blocks;
+                std::list<Cell*> free_cells;
+                std::list<Cell*> used_cells;
             public:
-                RtAllocator() = default;
-                ~RtAllocator();
+                Allocator() = default;
+                ~Allocator();
 
             protected:
                 void add_block();
-                void mark(std::list<RtCell*> roots);
+                void mark(std::list<Cell*> roots);
                 void sweep();
-                std::list<RtCell*> pinned();
+                std::list<Cell*> pinned();
 
             public:
-                void collect(std::list<RtCell*> roots);
+                void collect(std::list<Cell*> roots);
                 bool can_remove();
 
                 template <class T>
                 T* allocate() {
                     if (this->free_cells.empty()) { this->add_block(); }
-                    RtCell* cell = this->free_cells.front();
+                    Cell* cell = this->free_cells.front();
                     T* obj = new (cell) T();
                     this->free_cells.pop_front();
                     this->used_cells.push_back(obj);
@@ -47,4 +47,4 @@ namespace runtime {
 }
 
 
-#endif //M4_RTALLOCATOR_H
+#endif //M4_ALLOCATOR_H

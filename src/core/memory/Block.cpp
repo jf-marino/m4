@@ -1,14 +1,14 @@
 // Created by Juan Francisco Marino on 2019-04-16.
 
-#include "RtCell.h"
-#include "RtBlock.h"
+#include "Cell.h"
+#include "Block.h"
 
-using runtime::core::memory::RtBlock;
+using runtime::core::memory::Block;
 
-RtBlock::RtBlock() {
+Block::Block() {
     this->blob = this->block_allocator.allocate(CELL_SIZE * CELL_COUNT);
 }
 
-RtBlock::~RtBlock() {
+Block::~Block() {
     this->block_allocator.deallocate(this->blob, CELL_SIZE * CELL_COUNT);
 }
