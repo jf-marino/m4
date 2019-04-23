@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "src/main/memory/RtCell.h"
+#include "src/core/memory/RtCell.h"
 
 using testing::Le;
 

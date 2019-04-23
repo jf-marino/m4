@@ -3,6 +3,6 @@ cc_test(
     srcs = glob(["**/*.cpp"]),
     deps = [
         "@googletest//:gtest_main",
-        "//src/main:m4",
+        "//src/core:m4",
     ],
 )

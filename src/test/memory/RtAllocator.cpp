@@ -2,8 +2,8 @@
 
 #include <iostream>
 #include "gtest/gtest.h"
-#include "src/main/memory/RtCell.h"
-#include "src/main/memory/RtAllocator.h"
+#include "src/core/memory/RtCell.h"
+#include "src/core/memory/RtAllocator.h"
 
 /**
  * Example class used to have something to allocate
