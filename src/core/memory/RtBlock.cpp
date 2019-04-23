@@ -3,6 +3,8 @@
 #include "RtCell.h"
 #include "RtBlock.h"
 
+using runtime::core::memory::RtBlock;
+
 RtBlock::RtBlock() {
     this->blob = this->block_allocator.allocate(CELL_SIZE * CELL_COUNT);
 }

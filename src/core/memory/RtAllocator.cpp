@@ -5,6 +5,10 @@
 #include "RtBlock.h"
 #include "RtAllocator.h"
 
+using runtime::core::memory::CELL_SIZE;
+using runtime::core::memory::RtCell;
+using runtime::core::memory::RtAllocator;
+
 void clear_cell(RtCell* cell) {
     if (cell == nullptr) return;
     cell->~RtCell(); // Call destructor

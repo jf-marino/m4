@@ -3,16 +3,22 @@
 #ifndef M4_RTBLOCK_H
 #define M4_RTBLOCK_H
 
-const unsigned int CELL_COUNT = 1024;
+namespace runtime {
+    namespace core {
+        namespace memory {
+            const unsigned int CELL_COUNT = 1024;
 
-class RtBlock {
-public:
-    std::allocator<char> block_allocator;
-    char* blob = nullptr;
-public:
-    RtBlock();
-    ~RtBlock();
-};
+            class RtBlock {
+            public:
+                std::allocator<char> block_allocator;
+                char* blob = nullptr;
+            public:
+                RtBlock();
+                ~RtBlock();
+            };
+        }
+    }
+}
 
 
 #endif //M4_RTBLOCK_H

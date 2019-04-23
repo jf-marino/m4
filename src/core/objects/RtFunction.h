@@ -4,9 +4,15 @@
 #define M4_RTFUNCTION_H
 
 
-class RtFunction {
+namespace runtime {
+    namespace core {
+        namespace objects {
+            class RtFunction {
 
-};
+            };
+        }
+    }
+}
 
 
 #endif //M4_RTFUNCTION_H

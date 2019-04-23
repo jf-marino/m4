@@ -5,6 +5,9 @@
 #include "src/core/memory/RtCell.h"
 #include "src/core/memory/RtAllocator.h"
 
+using runtime::core::memory::RtCell;
+using runtime::core::memory::RtAllocator;
+
 /**
  * Example class used to have something to allocate
  */

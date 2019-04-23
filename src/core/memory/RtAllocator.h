@@ -8,35 +8,43 @@
 #include "RtCell.h"
 #include "RtBlock.h"
 
-class RtAllocator {
-protected:
-    std::list<RtBlock*> blocks;
-    std::list<RtCell*> free_cells;
-    std::list<RtCell*> used_cells;
-public:
-    RtAllocator() = default;
-    ~RtAllocator();
+namespace runtime {
+    namespace core {
+        namespace memory {
 
-protected:
-    void add_block();
-    void mark(std::list<RtCell*> roots);
-    void sweep();
-    std::list<RtCell*> pinned();
+            class RtAllocator {
+            protected:
+                std::list<RtBlock*> blocks;
+                std::list<RtCell*> free_cells;
+                std::list<RtCell*> used_cells;
+            public:
+                RtAllocator() = default;
+                ~RtAllocator();
 
-public:
-    void collect(std::list<RtCell*> roots);
-    bool can_remove();
+            protected:
+                void add_block();
+                void mark(std::list<RtCell*> roots);
+                void sweep();
+                std::list<RtCell*> pinned();
 
-    template <class T>
-    T* allocate() {
-        if (this->free_cells.empty()) { this->add_block(); }
-        RtCell* cell = this->free_cells.front();
-        T* obj = new (cell) T();
-        this->free_cells.pop_front();
-        this->used_cells.push_back(obj);
-        return obj;
+            public:
+                void collect(std::list<RtCell*> roots);
+                bool can_remove();
+
+                template <class T>
+                T* allocate() {
+                    if (this->free_cells.empty()) { this->add_block(); }
+                    RtCell* cell = this->free_cells.front();
+                    T* obj = new (cell) T();
+                    this->free_cells.pop_front();
+                    this->used_cells.push_back(obj);
+                    return obj;
+                }
+            };
+
+        }
     }
-};
+}
 
 
 #endif //M4_RTALLOCATOR_H

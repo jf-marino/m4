@@ -5,17 +5,23 @@
 
 #include <list>
 
-const unsigned int CELL_SIZE = 64;
+namespace runtime {
+    namespace core {
+        namespace memory {
+            const unsigned int CELL_SIZE = 64;
 
-class RtCell {
-public:
-    bool pinned : 1;
-    bool marked : 1;
-public:
-    virtual ~RtCell() = default;
-public:
-    virtual std::list<RtCell*> references() = 0;
-};
+            class RtCell {
+            public:
+                bool pinned : 1;
+                bool marked : 1;
+            public:
+                virtual ~RtCell() = default;
+            public:
+                virtual std::list<RtCell*> references() = 0;
+            };
+        }
+    }
+}
 
 
 #endif //M4_RTOBJECT_H

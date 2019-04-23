@@ -2,6 +2,8 @@
 
 #include "RtThread.h"
 
+using runtime::core::threading::RtThread;
+
 RtThread::RtThread(RtThread* parent) {
     this->parent = parent;
 }

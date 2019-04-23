@@ -9,6 +9,10 @@
 
 using testing::Le;
 using testing::Ne;
+using runtime::core::memory::CELL_SIZE;
+using runtime::core::memory::RtCell;
+using runtime::core::memory::RtAllocator;
+using runtime::core::objects::RtAvl;
 
 /*
  * Example class used as a placeholder inside AVL node tests. This class should try to be close
