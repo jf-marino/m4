@@ -27,9 +27,7 @@ TEST(ExecutionTest, CanBindVariables) {
     auto allocator = new Allocator();
     auto exec = Execution::create(allocator, nullptr);
 
-    auto jon = allocator->allocate<User>();
-    jon->name = "Jon Snow";
-    jon->age = 29;
+    auto jon = User::create(allocator, "Jon Snow", 29);
 
     exec->set("Jon", jon);
 
@@ -41,21 +39,65 @@ TEST(ExecutionTest, CanUpdateVariables) {
     auto allocator = new Allocator();
     auto exec = Execution::create(allocator, nullptr);
 
-    auto jon = allocator->allocate<User>();
-    jon->name = "Jon Snow";
-    jon->age = 29;
+    auto jon = User::create(allocator, "Jon Snow", 29);
 
     exec->set("Jon", jon);
 
     auto retrieved = exec->get<User>("Jon");
     EXPECT_EQ(retrieved->name, "Jon Snow");
 
-    auto aegon = allocator->allocate<User>();
-    aegon->name = "Aegon Targaryen";
-    aegon->age = 29;
+    auto aegon = User::create(allocator, "Aegon Targaryen", 29);
 
     exec->update("Jon", aegon);
 
     auto second_retrieved = exec->get<User>("Jon");
     EXPECT_EQ(second_retrieved->name, "Aegon Targaryen");
+}
+
+TEST(ExecutionTest, CanLookupVariablesInParentExecutions) {
+    auto allocator = new Allocator();
+    auto parent = Execution::create(allocator, nullptr);
+
+    auto jon = User::create(allocator, "Jon Snow", 29);
+
+    parent->set("Jon", jon);
+
+    auto child = Execution::create(allocator, parent);
+    auto retrieved = child->get<User>("Jon");
+
+    EXPECT_EQ(retrieved->name, "Jon Snow");
+}
+
+TEST(ExecutionTest, CanUpdateVariablesInParentExecutions) {
+    auto allocator = new Allocator();
+    auto parent = Execution::create(allocator, nullptr);
+
+    auto jon = User::create(allocator, "Jon Snow", 29);
+
+    parent->set("Jon", jon);
+
+    auto child = Execution::create(allocator, parent);
+    auto aegon = User::create(allocator, "Aegon Targaryen", 29);
+
+    child->update("Jon", aegon);
+
+    auto retrieved = parent->get<User>("Jon");
+    EXPECT_EQ(retrieved->name, "Aegon Targaryen");
+}
+
+TEST(ExecutionTest, CanShadowVariablesWithSet) {
+    auto allocator = new Allocator();
+    auto parent = Execution::create(allocator, nullptr);
+    auto child = Execution::create(allocator, parent);
+    auto jon = User::create(allocator, "Jon Snow", 29);
+
+    parent->set("Jon", jon);
+
+    auto arya = User::create(allocator, "Arya Stark", 17);
+    child->set("Jon", arya);
+
+    auto from_parent = parent->get<User>("Jon");
+    auto from_child = child->get<User>("Jon");
+    EXPECT_EQ(from_parent->name, "Jon Snow");
+    EXPECT_EQ(from_child->name, "Arya Stark");
 }

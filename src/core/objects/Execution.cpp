@@ -29,20 +29,36 @@ void Execution::set(std::string name, Cell* value) {
         this->variables = this->variables->set(this->allocator, hashed, kv);
 }
 
-void Execution::update(std::string name, Cell* value) {
-    if (this->variables == nullptr) {
-        if (this->parent == nullptr) return;
-        this->parent->update(name, value);
-    }
+bool Execution::update_local(std::size_t hashed, std::string name, Cell *value) {
+    if (this->variables == nullptr)
+        return false;
 
-    auto hashed = this->hasher(name);
     auto node = this->variables->get(hashed);
 
     if (node != nullptr) {
         auto kv = KeyValue<std::string, Cell>::create(this->allocator, name, value);
         this->variables = this->variables->set(this->allocator, hashed, kv);
-    } else {
-        if (this->parent != nullptr)
-            this->parent->update(name, value);
+        return true;
     }
+
+    return false;
+}
+
+bool Execution::update_parent(std::size_t hashed, std::string name, Cell *value) {
+    if (this->parent == nullptr)
+        return false;
+
+    return this->parent->update_by_hash(hashed, name, value);
+}
+
+bool Execution::update_by_hash(std::size_t hashed, std::string name, Cell *value) {
+    auto updated = this->update_local(hashed, name, value);
+    return !updated
+        ? this->update_parent(hashed, name, value)
+        : updated;
+}
+
+void Execution::update(std::string name, Cell* value) {
+    auto hashed = this->hasher(name);
+    this->update_by_hash(hashed, name, value);
 }

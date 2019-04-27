@@ -36,22 +36,48 @@ namespace runtime {
                 Execution() = default;
                 ~Execution() = default;
 
-            public:
-                void set(std::string name, Cell* value);
-                void update(std::string name, Cell* value);
-
+            private:
                 template <class T>
-                T* get(std::string name) {
+                T* get_from_local(std::size_t hashed) {
                     if (this->variables == nullptr)
                         return nullptr;
 
-                    auto hashed = this->hasher(name);
                     auto kv = this->variables->get(hashed);
 
                     if (kv == nullptr)
                         return nullptr;
 
                     return reinterpret_cast<T*>(kv->value);
+                }
+
+                template <class T>
+                T* get_by_hash(std::size_t hashed) {
+                    auto value = this->get_from_local<T>(hashed);
+                    return value == nullptr
+                        ? this->get_from_parent<T>(hashed)
+                        : value;
+                }
+
+                template <class T>
+                T* get_from_parent(std::size_t hashed) {
+                    if (this->parent == nullptr)
+                        return nullptr;
+
+                    return this->parent->get_by_hash<T>(hashed);
+                }
+
+                bool update_local(std::size_t hashed, std::string name, Cell* value);
+                bool update_parent(std::size_t hashed, std::string name, Cell* value);
+                bool update_by_hash(std::size_t hashed, std::string name, Cell* value);
+
+            public:
+                void set(std::string name, Cell* value);
+                void update(std::string name, Cell* value);
+
+                template <class T>
+                T* get(std::string name) {
+                    auto hashed = this->hasher(name);
+                    return this->get_by_hash<T>(hashed);
                 }
 
             public:

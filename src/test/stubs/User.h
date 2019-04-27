@@ -6,8 +6,10 @@
 #include <list>
 #include <string>
 #include "src/core/memory/Cell.h"
+#include "src/core/memory/Allocator.h"
 
 using runtime::core::memory::Cell;
+using runtime::core::memory::Allocator;
 
 /**
  * Example class used to have something to allocate
@@ -20,6 +22,13 @@ public:
 public:
     User() = default;
     ~User() override = default;
+public:
+    static User* create(Allocator* allocator, std::string name, int age) {
+        auto user = allocator->allocate<User>();
+        user->name = name;
+        user->age = age;
+        return user;
+    }
 public:
     std::list<Cell*> references() override {
         std::list<Cell*> refs;

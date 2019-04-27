@@ -180,7 +180,7 @@ namespace runtime {
                 K get_key() { return this->key; }
                 V* get_value() { return this->value; }
                 unsigned int height() { return this->rh > this->lh ? this->rh : this->lh; }
-                unsigned int weight() { return this->rh - this->lh; }
+                int weight() { return this->rh - this->lh; }
 
                 Avl<K, V>* set(Allocator* allocator, K key, V* value) {
                     auto cloned = this->clone(allocator);
