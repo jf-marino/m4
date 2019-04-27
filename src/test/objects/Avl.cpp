@@ -22,7 +22,7 @@ using runtime::core::objects::Avl;
 class Placeholder : public Cell {
 public:
     std::string field_one;
-    std::string field_two;
+    int age;
 public:
     Placeholder() = default;
     std::list<Cell*> references() override {
@@ -31,10 +31,10 @@ public:
 };
 
 
-Placeholder* h(Allocator* alloc, std::string one, std::string two) {
+Placeholder* h(Allocator* alloc, std::string one, int age) {
     auto ph = alloc->allocate<Placeholder>();
     ph->field_one = one;
-    ph->field_two = two;
+    ph->age = age;
     return ph;
 }
 
@@ -52,10 +52,10 @@ TEST(AvlTest, ShouldCreate) {
 
 TEST(AvlTest, CanBalanceItself) {
     auto allocator = new Allocator();
-    auto node = Avl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", "Snow"));
+    auto node = Avl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", 29));
 
-    node = node->set(allocator, 2, h(allocator, "Danaerys", "Targaryen"));
-    node = node->set(allocator, 3, h(allocator, "Arya", "Stark"));
+    node = node->set(allocator, 2, h(allocator, "Danaerys", 30));
+    node = node->set(allocator, 3, h(allocator, "Arya", 17));
 
     auto arya   = node->get(3);
     auto jon    = node->get(1);
@@ -70,9 +70,9 @@ TEST(AvlTest, CanBalanceItself) {
 
 TEST(AvlTest, CanRemoveElements) {
     auto allocator = new Allocator();
-    auto node = Avl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", "Snow"));
-    node = node->set(allocator, 2, h(allocator, "Danaerys", "Targaryen"));
-    node = node->set(allocator, 3, h(allocator, "Arya", "Stark"));
+    auto node = Avl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", 29));
+    node = node->set(allocator, 2, h(allocator, "Danaerys", 30));
+    node = node->set(allocator, 3, h(allocator, "Arya", 17));
 
     node = node->remove(allocator, 2);
 
@@ -87,9 +87,9 @@ TEST(AvlTest, CanRemoveElements) {
 
 TEST(AvlTest, TestGarbageCollection) {
     auto allocator = new Allocator();
-    auto node_one = Avl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", "Snow"));
-    auto node_two = node_one->set(allocator, 2, h(allocator, "Danaerys", "Targaryen"));
-    auto node_three = node_two->set(allocator, 3, h(allocator, "Arya", "Stark"));
+    auto node_one = Avl<int, Placeholder>::create(allocator, 1, h(allocator, "Jon", 29));
+    auto node_two = node_one->set(allocator, 2, h(allocator, "Danaerys", 30));
+    auto node_three = node_two->set(allocator, 3, h(allocator, "Arya", 17));
 
     EXPECT_THAT(node_two->get(1), Ne(nullptr));
     EXPECT_THAT(node_two->get(2), Ne(nullptr));
