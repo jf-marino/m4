@@ -10,6 +10,7 @@
 #include "src/core/memory/Allocator.h"
 #include "src/core/objects/Avl.h"
 #include "src/core/objects/Iterator.h"
+#include "../stubs/User.h"
 
 using testing::Le;
 using testing::Ne;
@@ -18,19 +19,6 @@ using runtime::core::memory::Cell;
 using runtime::core::memory::Allocator;
 using runtime::core::objects::Avl;
 using runtime::core::objects::Iterator;
-
-
-/*
- * Example class used just so we have something to iterate over.
- */
-class User : public Cell {
-public:
-    std::string name;
-public:
-    std::list<Cell*> references() override {
-        return std::list<Cell*> {};
-    }
-};
 
 
 Avl<int, User>* create(Allocator* allocator, std::list<std::string> names) {
@@ -50,11 +38,7 @@ Avl<int, User>* create(Allocator* allocator, std::list<std::string> names) {
     return node;
 }
 
-
-
-
 TEST(IteratorTest, MustNotExceedSizeLimits) {
-    EXPECT_THAT(sizeof(User), Le(CELL_SIZE));
     EXPECT_THAT(sizeof(Iterator<int, User>), Le(CELL_SIZE));
 }
 

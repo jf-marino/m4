@@ -11,10 +11,6 @@ using runtime::core::memory::Allocator;
 namespace runtime {
     namespace core {
         namespace objects {
-            class Execution {
-
-            };
-
             class Function {
 
             };

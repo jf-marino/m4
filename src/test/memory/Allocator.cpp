@@ -4,32 +4,10 @@
 #include "gtest/gtest.h"
 #include "src/core/memory/Cell.h"
 #include "src/core/memory/Allocator.h"
+#include "../stubs/User.h"
 
 using runtime::core::memory::Cell;
 using runtime::core::memory::Allocator;
-
-/**
- * Example class used to have something to allocate
- */
-class User : public Cell {
-public:
-    std::string name;
-    unsigned int age;
-    User* parent = nullptr;
-public:
-    User() = default;
-    ~User() override = default;
-public:
-    std::list<Cell*> references() override {
-        std::list<Cell*> refs;
-        if (this->parent != nullptr) {
-            refs.push_back(this->parent);
-        }
-        return refs;
-    }
-};
-
-
 
 TEST(AllocatorTest, AllocatesAnObject) {
     auto alloc = new Allocator();

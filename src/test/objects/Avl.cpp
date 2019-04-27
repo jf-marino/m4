@@ -6,6 +6,7 @@
 #include "src/core/memory/Cell.h"
 #include "src/core/memory/Allocator.h"
 #include "src/core/objects/Avl.h"
+#include "../stubs/Placeholder.h"
 
 using testing::Le;
 using testing::Ne;
@@ -14,21 +15,6 @@ using runtime::core::memory::Cell;
 using runtime::core::memory::Allocator;
 using runtime::core::objects::Avl;
 
-/*
- * Example class used as a placeholder inside AVL node tests. This class should try to be close
- * to the size limit of CELL_SIZE (defined in Cell.h) so as to mimic normal runtime conditions
- * as close as possible.
- */
-class Placeholder : public Cell {
-public:
-    std::string field_one;
-    int age;
-public:
-    Placeholder() = default;
-    std::list<Cell*> references() override {
-        return std::list<Cell*> {};
-    }
-};
 
 
 Placeholder* h(Allocator* alloc, std::string one, int age) {
@@ -40,7 +26,6 @@ Placeholder* h(Allocator* alloc, std::string one, int age) {
 
 
 TEST(AvlTest, MustNotExceedSizeLimits) {
-    EXPECT_THAT(sizeof(Placeholder), Le(CELL_SIZE));
     EXPECT_THAT(sizeof(Avl<int, Placeholder>), Le(CELL_SIZE));
 }
 
